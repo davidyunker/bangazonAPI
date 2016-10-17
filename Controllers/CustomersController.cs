@@ -116,28 +116,19 @@ namespace BangazonAPI.Controllers
         {
             if (ModelState.IsValid && id == customer.CustomerId)
             {
-            context.Customer.Attach(customer);
                 try 
                 {
+                    context.Update(customer);
                     context.SaveChanges();
                 }
-                catch 
+                    catch (System.InvalidOperationException ex)
                 {
-                    if (CustomerExists(customer.CustomerId))
-                    {
-                        Ok(customer);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    NotFound();
                 }
+                Ok(customer);
             }
         }
         
-
-
-
 
         // DELETE api/values/5
         [HttpDelete("{id}")]

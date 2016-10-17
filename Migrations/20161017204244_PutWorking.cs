@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BangazonAPI.Migrations
 {
-    public partial class DeleteOnAll : Migration
+    public partial class PutWorking : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

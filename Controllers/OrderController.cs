@@ -108,8 +108,21 @@ namespace BangazonAPI.Controllers
 // the above defers to the GET method/handler further up. 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]Order order)
         {
+            if (ModelState.IsValid && id == order.OrderId)
+            {
+                try 
+                {
+                    context.Update(order);
+                    context.SaveChanges();
+                }
+                    catch (System.InvalidOperationException ex)
+                {
+                    NotFound();
+                }
+                Ok(order);
+            }
         }
 
         // DELETE api/values/5

@@ -101,6 +101,23 @@ namespace BangazonAPI.Controllers
 
             return CreatedAtRoute("GetProduct", new { id = product.ProductId }, product);
         }
+         [HttpPut("{id}")]
+        public void Put(int id, [FromBody]Product product)
+        {
+            if (ModelState.IsValid && id == product.ProductId)
+            {
+                try 
+                {
+                    context.Update(product);
+                    context.SaveChanges();
+                }
+                    catch (System.InvalidOperationException ex)
+                {
+                    NotFound();
+                }
+                Ok(product);
+            }
+        }
 
               [HttpDelete("{id}")]
         public void Delete(int id)

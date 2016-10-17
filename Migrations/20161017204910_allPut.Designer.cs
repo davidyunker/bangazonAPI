@@ -8,8 +8,8 @@ using Bangazon.Data;
 namespace BangazonAPI.Migrations
 {
     [DbContext(typeof(BangazonContext))]
-    [Migration("20161017183253_DeleteOnAll")]
-    partial class DeleteOnAll
+    [Migration("20161017204910_allPut")]
+    partial class allPut
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
