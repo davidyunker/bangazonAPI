@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BangazonAPI.Migrations
 {
-    public partial class LineItem : Migration
+    public partial class FrontEnd : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -4,17 +4,18 @@
 
 app.factory("ApiCallFactory", ($q, $http, $location, $routeParams) => {
 
+
 let getCustomers = () => {
     return $q ((resolve, reject) => {
       $http.get(`http://localhost:5000/customers`)
       .success((itemObject) => {
-        resolve(itemObject);
+        resolve(itemObject)
       })
       .error((error) => {
-        reject(error);
+        reject(error)
         console.log("error", error)
-      });
-    });
+      })
+    })
     };
 
   let getSingleCustomer = (customerId) => {
@@ -74,5 +75,5 @@ let postCustomer  = (customerInfo) => {
     })
   }
 
-
+return {putCustomer, deleteCustomer, postCustomer, getCustomers, getSingleCustomer}
 })

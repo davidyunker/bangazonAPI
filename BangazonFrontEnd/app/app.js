@@ -10,7 +10,7 @@ app.config(function($routeProvider) {
             templateUrl: "partials/product.html",
             controller: "ProductCtrl"
         }).
-         when("/customers", {
+         when("/", {
             templateUrl: "partials/customers.html",
             controller: 'CustomersCtrl'
         }).
