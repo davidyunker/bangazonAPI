@@ -112,47 +112,61 @@ namespace BangazonAPI.Controllers
 // the above defers to the GET method/handler further up. 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]Customer customer)
+        public IActionResult Put(int id, [FromBody]Customer customer)
         {
-            if (ModelState.IsValid && id == customer.CustomerId)
+            if (customer.CustomerId != id)
             {
-                try 
-                {
-                    context.Update(customer);
-                    context.SaveChanges();
-                }
-                    catch (System.InvalidOperationException ex)
-                {
-                    NotFound();
-                }
-                Ok(customer);
+                return BadRequest(ModelState);
+
             }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+
+                context.Update(customer);
+                context.SaveChanges();
+
+            }
+            catch (System.InvalidOperationException ex)
+            {
+                return NotFound();
+            }
+            return Ok(customer);
         }
+        
         
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
-    {
-        Customer customer = context.Customer.Single(m => m.CustomerId == id);
+        public IActionResult Delete(int id)
 
-        context.Customer.Remove(customer);
-        try
-        {
-        context.SaveChanges();
-        }
-        catch 
-        {
-            if (customer != null) 
+    {
+         if (!ModelState.IsValid)
             {
-                Ok(customer);
+           return BadRequest(ModelState);
             }
-            else 
+            try
             {
-                throw; 
+            Customer customer = context.Customer.Single(m => m.CustomerId == id);
+
+                if (customer == null)
+                {
+                    return NotFound();
+                }
+                context.Customer.Remove(customer);
+                context.SaveChanges();
+
+                return Ok(customer);
+            }
+            catch (System.InvalidOperationException ex)
+            {
+                return NotFound();
             }
         }
-    }
+ 
           private bool CustomerExists(int id)
         {
             return context.Customer.Count(e => e.CustomerId == id) > 0;

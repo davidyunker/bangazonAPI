@@ -8,8 +8,8 @@ using Bangazon.Data;
 namespace BangazonAPI.Migrations
 {
     [DbContext(typeof(BangazonContext))]
-    [Migration("20161017204910_allPut")]
-    partial class allPut
+    [Migration("20161018153341_LineItem")]
+    partial class LineItem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

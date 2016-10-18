@@ -9,44 +9,40 @@ using Microsoft.AspNetCore.Http;
 
 namespace BangazonAPI.Controllers
 {
-    //entity framework - interacting with your database without hitting your database at all - the middle man between the models (classes) - entity framework handles the translation between all of the different databases with different standards. All of this is under a library in .Net. ORM object relational mapping.
-    //DB context
+
     [ProducesAttribute("application/json")]
     //all will product json 
     [Route("[controller]")]
-    //localhost5000/customers is the route
-    public class OrderController : Controller
+    //localhost5000/LineItem is the route
+    public class LineItemController : Controller
     {
         private BangazonContext context;
 
-        public OrderController(BangazonContext ctx)
+        public LineItemController(BangazonContext ctx)
         {
             //a controller will have the context which is the database you're hitting
             context = ctx;
         }
-        // GET api/values
+
         [HttpGet]
        
         public IActionResult Get()
         {
-            IQueryable<object> orders = from order in context.Order select order;
-            //out interface to the database is in context right now. context.Customer is the customer in the DB
-            //from the customer table select everything, then hold it inside the customers variable. At the end it will hold a collection of customers that are in the database. If there are none, it will be null. Then the code below runs. 
+            IQueryable<object> lineitems = from lineitem in context.LineItem select lineitem;
+            //our interface to the database is in context right now. context.LineItem is the lineitem in the DB
+            //from the lineitem table select everything, then hold it inside the lineitems variable. At the end it will hold a collection of customers that are in the database. If there are none, it will be null. Then the code below runs. 
 
-            if (orders == null)
+            if (lineitems == null)
             {
                 return NotFound();
                 //NotFound() is a helper function. It is a valid 404 response back to the client. 
             }
 
-            return Ok(orders);
-            //put all the customers to the body of the response and send it back to the client
+            return Ok(lineitems);
+            //put all the lineitems to the body of the response and send it back to the client
 
         }
-
-        // GET api/values/5
-        
-        [HttpGet("{id}", Name = "GetOrder")]
+         [HttpGet("{id}", Name = "GetLineItem")]
         public IActionResult Get([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -56,15 +52,15 @@ namespace BangazonAPI.Controllers
 
             try
             {
-                // returns a single customer 
-                Order order = context.Order.Single(m => m.OrderId == id);
+                // returns a single lineitem  
+                LineItem lineitem = context.LineItem.Single(m => m.LineItemId == id);
 
-                if (order == null)
+                if (lineitem == null)
                 {
                     return NotFound();
                 }
                 
-                return Ok(order);
+                return Ok(lineitem);
             }
             catch (System.InvalidOperationException ex)
             {
@@ -79,21 +75,21 @@ namespace BangazonAPI.Controllers
 
     //   !ModelState is comparing against all your annotations, etc. 
 
-        public IActionResult Post([FromBody] Order order)
+        public IActionResult Post([FromBody] LineItem lineitem)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 // 
-            context.Order.Add(order);
+            context.LineItem.Add(lineitem);
             try
             {
                 context.SaveChanges();
             }
             catch (DbUpdateException)
             {
-                if (OrderExists(order.OrderId))
+                if (LineItemExists(lineitem.LineItemId))
                 {
                     return new StatusCodeResult(StatusCodes.Status409Conflict);
                 }
@@ -103,15 +99,15 @@ namespace BangazonAPI.Controllers
                 }
             }
 
-            return CreatedAtRoute("GetOrder", new { id = order.OrderId }, order);
+            return CreatedAtRoute("GetLineItem", new { id = lineitem.LineItemId }, lineitem);
         }
 // the above defers to the GET method/handler further up. 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]Order order)
+        public IActionResult Put(int id, [FromBody]LineItem lineitem)
         {
            
-         if (order.OrderId != id)
+         if (lineitem.LineItemId != id)
             {
                 return BadRequest(ModelState);
 
@@ -123,7 +119,7 @@ namespace BangazonAPI.Controllers
             try
             {
 
-                context.Update(order);
+                context.Update(lineitem);
                 context.SaveChanges();
 
             }
@@ -131,7 +127,7 @@ namespace BangazonAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(order);
+            return Ok(lineitem);
         }
 
         // DELETE api/values/5
@@ -146,25 +142,26 @@ namespace BangazonAPI.Controllers
             }
             try
             {
-            Order order = context.Order.Single(m => m.OrderId == id);
+            LineItem lineitem = context.LineItem.Single(m => m.LineItemId == id);
 
-                if (order == null)
+                if (lineitem == null)
                 {
                     return NotFound();
                 }
-                context.Order.Remove(order);
+                context.LineItem.Remove(lineitem);
                 context.SaveChanges();
 
-                return Ok(order);
+                return Ok(lineitem);
             }
             catch (System.InvalidOperationException ex)
             {
                 return NotFound();
             }
         }
-          private bool OrderExists(int id)
+          private bool LineItemExists(int id)
         {
-            return context.Order.Count(e => e.OrderId == id) > 0;
+            return context.LineItem.Count(e => e.LineItemId == id) > 0;
         }
+
     }
-} 
+}

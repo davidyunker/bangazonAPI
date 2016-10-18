@@ -102,44 +102,57 @@ namespace BangazonAPI.Controllers
             return CreatedAtRoute("GetProduct", new { id = product.ProductId }, product);
         }
          [HttpPut("{id}")]
-        public void Put(int id, [FromBody]Product product)
+        public IActionResult Put(int id, [FromBody]Product product)
         {
-            if (ModelState.IsValid && id == product.ProductId)
+           
+           if (product.ProductId != id)
             {
-                try 
-                {
-                    context.Update(product);
-                    context.SaveChanges();
-                }
-                    catch (System.InvalidOperationException ex)
-                {
-                    NotFound();
-                }
-                Ok(product);
+                return BadRequest(ModelState);
+
             }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+
+                context.Update(product);
+                context.SaveChanges();
+
+            }
+            catch (System.InvalidOperationException ex)
+            {
+                return NotFound();
+            }
+            return Ok(product);
         }
 
-              [HttpDelete("{id}")]
-        public void Delete(int id)
+          [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+
     {
-        Product product = context.Product.Single(m => m.ProductId == id);
+         if (!ModelState.IsValid)
+            {
+           return BadRequest(ModelState);
+            }
+            try
+            {
+            Product product = context.Product.Single(m => m.ProductId == id);
 
-        context.Product.Remove(product);
-        try
-        {
-        context.SaveChanges();
-        }
-        catch 
-        {
-            if (product != null) 
-            {
-                Ok(product);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                context.Product.Remove(product);
+                context.SaveChanges();
+
+                return Ok(product);
             }
-            else 
+            catch (System.InvalidOperationException ex)
             {
-                throw; 
+                return NotFound();
             }
-        }
     }
          private bool ProductExists(int id)
         {
