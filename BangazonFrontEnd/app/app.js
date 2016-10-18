@@ -1,6 +1,6 @@
 "use strict";
 
-var app = angular.module("BangazonAPI", ["ngRoute", "ngMaterial"])
+var app = angular.module("BangazonAPI", ["ngRoute"]);
 
 
 
@@ -19,6 +19,6 @@ app.config(function($routeProvider) {
             controller: 'OrderCtrl'
         }).
 
-        otherwise("/");
+        otherwise("/")
         // way to make sure they don't go anywhere else.
 });

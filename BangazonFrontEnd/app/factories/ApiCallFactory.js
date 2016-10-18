@@ -39,7 +39,22 @@ let postCustomer  = (customerInfo) => {
           console.log(ObjFromMyServer);
           // currentRouteID = ObjFromFirebase.name;
           // console.log("I'M THE FIREBASE ID I CAN HELP YOU", currentRouteID)
-          resolve(ObjFromFirebase);
+          resolve(ObjFromMyServer);
+        })
+        .error ((error) => {
+          reject(error);
+    })
+    })
+
+  }
+
+  let putCustomer = (customerInfo, customerId) => {
+  console.log("putCustomer is running", customerId)
+    return $q((resolve, reject) => {
+       $http.put(`http://localhost:5000/customers/${customerId}`,
+        JSON.stringify(customerInfo))
+        .success((ObjFromMyServer) => {
+          resolve(ObjFromMyServer);
         })
         .error ((error) => {
           reject(error);
@@ -48,4 +63,16 @@ let postCustomer  = (customerInfo) => {
 
 
 }
+    let deleteCustomer = (customerId) => {
+    console.log("deleteCustomer is running", customerId)
+    return $q((resolve, reject) => {
+    $http.delete(`http://localhost:5000/customers/${customerId}`)
+    .success((ObjFromMyServer) => {
+      console.log("this is the ObjFromMyServer", ObjFromMyServer)
+    resolve(ObjFromMyServer);
+    })
+    })
+  }
+
+
 })
